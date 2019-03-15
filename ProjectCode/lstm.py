@@ -1,6 +1,8 @@
-import time
+import datetime
 import warnings
 import numpy as np
+import fix_yahoo_finance as yf
+import pandas_datareader as pdr
 from numpy import newaxis
 from keras.layers.core import Dense, Activation, Dropout
 from keras.layers.recurrent import LSTM
@@ -9,6 +11,12 @@ import matplotlib.pyplot as plt
 
 
 warnings.filterwarnings("ignore")
+
+def retrieve_data(ticker, start_date, end_date):
+    yf.pdr_override()
+    data = pdr.get_data_yahoo('ticker', start = start_date, end = end_date)
+
+    print(data)
 
 def plot_results_multiple(predicted_data, true_data, prediction_len):
     fig = plt.figure(facecolor='white')
@@ -25,12 +33,12 @@ def plot_results_multiple(predicted_data, true_data, prediction_len):
 def load_data(filename, seq_len, normalise_window):
     f = open(filename, 'r').read()
     data = f.split('\n')
-    
+
     sequence_length = seq_len + 1
     result = []
     for index in range(len(data) - sequence_length):
         result.append(data[index: index + sequence_length])
-    
+
     if normalise_window:
         result = normalise_windows(result)
 
@@ -43,7 +51,7 @@ def load_data(filename, seq_len, normalise_window):
     y_train = train[:, -1]
     x_test = result[int(row):, :-1]
     y_test = result[int(row):, -1]
-    
+
     x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
     x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
@@ -107,4 +115,4 @@ def predict_sequences_multiple(model, data, window_size, prediction_len):
             curr_frame = np.insert(curr_frame, [window_size-1], predicted[-1], axis=0)
         prediction_seqs.append(predicted)
     return prediction_seqs
-    
+
