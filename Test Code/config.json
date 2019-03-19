@@ -1,6 +1,6 @@
 {
 	"data": {
-		"filename": "sp500.csv",
+		"filename": "GOOGL.csv",
 		"columns": [
 			"Close",
 			"Volume"
