@@ -50,6 +50,11 @@ def DELTA(stockdf):
 
 stockdf = ifunc.read_full("AAPL.csv")
 stockdf = MACD(stockdf)
+<<<<<<< HEAD
 stockdf = RSI(stockdf)
 stockdf = DELTA(stockdf)
 stockdf.to_csv(path_or_buf="titties.csv",index=False)
+=======
+stockdf.to_csv(path_or_buf="nudes.csv", index=False)
+# stockdf = RSI(stockdf)
+>>>>>>> 7349653cb6f906ad97b4083d1a26e750042fc909
