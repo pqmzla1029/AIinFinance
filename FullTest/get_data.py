@@ -8,11 +8,12 @@ def main():
     #edate='2019-03-14'
     company,sdate,edate=ifunc.read_file()
     choice=1
-    filename=company+'.csv'
+    filename=company+".csv"
     df=pd.DataFrame()
     df=ifunc.import_data(company,sdate,edate)
-    print(df)
+    #print(df)
     df.to_csv(index=True,index_label='date',path_or_buf=filename)
+    #ifunc.write_full(filename)
     """
     if choice==1:
         print()

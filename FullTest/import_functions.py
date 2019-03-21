@@ -11,7 +11,7 @@ def import_data(company,sdate,edate):
     data = yf.download(company,sdate,edate)
     path=company+".csv"
     print(path)
-    #data.to_csv(index=True,index_label='date',path_or_buf=path)
+    #
     data.Close.plot()
     return data
     #plt.show()
@@ -19,7 +19,11 @@ def import_data(company,sdate,edate):
 def read_full(filename):
     df=pd.read_csv(filename)
     return df
-        
+"""
+def write_full(filename):
+    data.to_csv(index=True,index_label='date',path_or_buf=filename)
+    return df
+"""        
 def read_spec(filename):
     df=pd.read_csv(filename)
     df = df[['Close']]

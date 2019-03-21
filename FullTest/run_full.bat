@@ -1,4 +1,4 @@
 python simple_GUI.py
-python import_functions.py
+python get_data.py
 python aux_functions.py
 pause

@@ -52,7 +52,7 @@ def DELTA(stockdf):
 def main():
     filename,date1,date2= ifunc.read_file()
     filename=filename+".csv"
-    print(filename)
+    #print(filename)
     stockdf = ifunc.read_full(filename)
     stockdf = MACD(stockdf)
     stockdf = RSI(stockdf)
