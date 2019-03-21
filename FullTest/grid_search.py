@@ -17,6 +17,7 @@ from keras.layers import Dense
 from keras.layers import LSTM
 import import_functions as ifunc
 import numpy as np
+import pickle
 
 def model_configs(n_input, n_nodes, n_epochs, n_batch, n_diff, n_test_train_split):
 	# create configs
@@ -82,12 +83,12 @@ def normalise_windows(window_data):
         normalised_data.append(normalised_window)
     return normalised_data
 
-filename, date1, date2 = ifunc.read_file()
-filename = filename+".csv"
+company, date1, date2 = ifunc.read_file()
+filename = company+".csv"
 data = ifunc.read_full(filename)
 
-data = data.iloc[:,6]
-
+data1 = data['Close']
+#print(data)
 N_input = [50]
 N_nodes = [50]
 N_epochs = [50]
@@ -97,5 +98,12 @@ N_split = [0.9] #This is the test train split, as a percentage
 
 cfg_list = model_configs(N_input, N_nodes, N_epochs, N_batch, N_diff, N_split)
 
-output = [model_fit(data, cfg) for cfg in cfg_list]
+output = [model_fit(data1, cfg) for cfg in cfg_list]
 
+f= open("output.txt","w+")
+f.write(str(output))
+f.close()
+"""
+wwith open('output.txt', 'w') as filehandle:  
+    filehandle.writelines("%s\n" % place for place in output)
+"""
