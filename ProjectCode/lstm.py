@@ -29,6 +29,43 @@ def plot_results_multiple(predicted_data, true_data, prediction_len):
         plt.plot(padding + data, label='Prediction')
         plt.legend()
     plt.show()
+	
+def model_fit(X_train, y_train, config):
+
+	n_input, n_nodes, n_epochs, n_batch, n_diff = config
+
+	n_features = 1
+	
+	model = Sequential()
+	model.add(LSTM(n_nodes, activation='relu', input_shape=(n_input, n_features)))
+	model.add(Dense(n_nodes, activation='relu'))
+	model.add(Dense(1))
+	model.compile(loss='mse', optimizer='adam')	
+	
+	# # model = Sequential()
+
+	# # model.add(LSTM(
+		# # input_dim=1,
+		# # output_dim=50,
+		# # return_sequences=True))
+	# # model.add(Dropout(0.2))
+
+	# # model.add(LSTM(
+		# # 100,
+		# # return_sequences=False))
+	# # model.add(Dropout(0.2))
+
+	# # model.add(Dense(
+		# # output_dim=1))
+	# # model.add(Activation('linear'))
+
+	#start = time.time()
+	# model.compile(loss='mse', optimizer='rmsprop')
+	#print('compilation time : ', time.time() - start)
+	
+	model.fit(X_train, y_train, epochs=n_epochs, batch_size=n_batch, verbose=0)
+	
+	return model
 
 def load_data(filename, seq_len, normalise_window):
     f = open(filename, 'r').read()
