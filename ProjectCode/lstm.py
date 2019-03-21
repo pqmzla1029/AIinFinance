@@ -18,49 +18,27 @@ def plot_results_multiple(predicted_data, true_data, prediction_len):
     #print 'yo'
     #Pad the list of predictions to shift it in the graph to it's correct start
     for i, data in enumerate(predicted_data):
-        padding = [None for p in xrange(i * prediction_len)]
+        padding = [None for p in range(i * prediction_len)]
         plt.plot(padding + data, label='Prediction')
         plt.legend()
     plt.show()
 	
 def model_fit(data, config):
-
-	n_input, n_nodes, n_epochs, n_batch, n_diff, n_test_train_split = config
-
-	x_train, y_train, x_test, y_test = load_data(data, n_input, False, n_test_train_split)
-
-	n_features = 1
-	
-	model = Sequential()
-	model.add(LSTM(n_nodes, activation='relu', input_shape=(n_input, n_features)))
-	model.add(Dense(n_nodes, activation='relu'))
-	model.add(Dense(1))
-	model.compile(loss='mse', optimizer='adam')	
-	
-	# # model = Sequential()
-
-	# # model.add(LSTM(
-		# # input_dim=1,
-		# # output_dim=50,
-		# # return_sequences=True))
-	# # model.add(Dropout(0.2))
-
-	# # model.add(LSTM(
-		# # 100,
-		# # return_sequences=False))
-	# # model.add(Dropout(0.2))
-
-	# # model.add(Dense(
-		# # output_dim=1))
-	# # model.add(Activation('linear'))
-
-	#start = time.time()
-	# model.compile(loss='mse', optimizer='rmsprop')
-	#print('compilation time : ', time.time() - start)
-	
-	model.fit(x_train, y_train, epochs=n_epochs, batch_size=n_batch, verbose=0)
-	
-	return model
+    n_input, n_nodes, n_epochs, n_batch, n_diff, n_test_train_split = config
+    x_train, y_train, x_test, y_test = load_data(data, n_input, False, n_test_train_split)
+    n_features = 1
+    model = Sequential()
+    model.add(LSTM(4, activation='relu', input_shape=(n_input, n_features)))
+    model.add(Dense(2*n_nodes, activation='relu'))
+    model.add(Dropout(0.2))
+    model.add(Dense(2*n_nodes, activation='relu'))
+    model.add(Dropout(0.2))
+    model.add(Dense(3*n_nodes, activation='relu'))
+    model.add(Dense(1))
+    model.compile(loss='mse', optimizer='adam')
+    model.fit(x_train, y_train, epochs=n_epochs, batch_size=n_batch, verbose=0)
+    print(y_test.shape)
+    return model, x_test, y_test
 
 def load_data(data, seq_len, normalise_window, test_train_split):
     # f = open(filename, 'r').read()
@@ -129,7 +107,7 @@ def predict_sequence_full(model, data, window_size):
     #Shift the window by 1 new prediction each time, re-run predictions on new window
     curr_frame = data[0]
     predicted = []
-    for i in xrange(len(data)):
+    for i in range(len(data)):
         predicted.append(model.predict(curr_frame[newaxis,:,:])[0,0])
         curr_frame = curr_frame[1:]
         curr_frame = np.insert(curr_frame, [window_size-1], predicted[-1], axis=0)
@@ -138,10 +116,10 @@ def predict_sequence_full(model, data, window_size):
 def predict_sequences_multiple(model, data, window_size, prediction_len):
     #Predict sequence of 50 steps before shifting prediction run forward by 50 steps
     prediction_seqs = []
-    for i in xrange(len(data)/prediction_len):
+    for i in range(int(len(data)/prediction_len)):
         curr_frame = data[i*prediction_len]
         predicted = []
-        for j in xrange(prediction_len):
+        for j in range(prediction_len):
             predicted.append(model.predict(curr_frame[newaxis,:,:])[0,0])
             curr_frame = curr_frame[1:]
             curr_frame = np.insert(curr_frame, [window_size-1], predicted[-1], axis=0)
