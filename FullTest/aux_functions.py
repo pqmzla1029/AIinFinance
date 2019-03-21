@@ -2,11 +2,11 @@ import datetime as dt
 import warnings
 import numpy as np
 import pandas as pd
-import import_funtions as ifunc
+import import_functions as ifunc
 
 def MACD(stockdf):
     df = stockdf
-    df = df.reset_index()
+    #df = df.reset_index()
     df['30 mavg'] = df['Close'].rolling(30).mean()
     df['26 ema'] = df['Close'].ewm(span = 26).mean()
     df['12 ema'] = df['Close'].ewm(span = 12).mean()
@@ -43,18 +43,20 @@ def RSI(stockdf):
 
 def DELTA(stockdf):
     df = stockdf
-    df = df.reset_index()
+    #df = df.reset_index()
     df['Daily Change'] = df['Close'].pct_change()
     df['5 Day Change'] = df['Close'].pct_change(periods = 5)
     return df
 
-stockdf = ifunc.read_full("AAPL.csv")
-stockdf = MACD(stockdf)
-<<<<<<< HEAD
-stockdf = RSI(stockdf)
-stockdf = DELTA(stockdf)
-stockdf.to_csv(path_or_buf="titties.csv",index=False)
-=======
-stockdf.to_csv(path_or_buf="nudes.csv", index=False)
-# stockdf = RSI(stockdf)
->>>>>>> 7349653cb6f906ad97b4083d1a26e750042fc909
+
+def main():
+    company,date1,date2= ifunc.read_file()
+    filename=company+".csv"
+    #print(filename)
+    stockdf = ifunc.read_full(filename)
+    stockdf = MACD(stockdf)
+    stockdf = RSI(stockdf)
+    stockdf = DELTA(stockdf)
+    stockdf.to_csv(path_or_buf=filename,index=False)
+
+main()

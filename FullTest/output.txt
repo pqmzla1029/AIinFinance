@@ -1,0 +1,1 @@
+[(<keras.engine.sequential.Sequential object at 0x000002028F2B4B00>, array([], shape=(0, 50, 1), dtype=float64), array([], dtype=float64))]
