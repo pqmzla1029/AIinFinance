@@ -24,9 +24,10 @@ def read_spec(filename):
     return df
 
 def main():
-    company='GOOGL'
-    sdate='2005-01-01'
-    edate='2019-03-14'
+    #company='GOOGL'
+    #sdate='2005-01-01'
+    #edate='2019-03-14'
+    company,sdate,edate=read_file()
     choice=1
     filename=company+'.csv'
     df=pd.DataFrame()
@@ -38,7 +39,15 @@ def main():
         print()
         df=read_spec(filename)
     #print(df)
-    
+
+def read_file():
+    text_file=open("input.txt","r+")
+    lines = text_file.read().split(' ')
+    #print(lines[0]+" "+lines[1]+" "+lines[3])
+    return lines[0],lines[1],lines[3]
+    text_file.close()
 
 main()
+
+
     
