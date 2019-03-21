@@ -9,14 +9,7 @@ from keras.layers.recurrent import LSTM
 from keras.models import Sequential
 import matplotlib.pyplot as plt
 
-
 warnings.filterwarnings("ignore")
-
-def retrieve_data(ticker, start_date, end_date):
-    yf.pdr_override()
-    data = pdr.get_data_yahoo('ticker', start = start_date, end = end_date)
-
-    print(data)
 
 def plot_results_multiple(predicted_data, true_data, prediction_len):
     fig = plt.figure(facecolor='white')
@@ -29,10 +22,49 @@ def plot_results_multiple(predicted_data, true_data, prediction_len):
         plt.plot(padding + data, label='Prediction')
         plt.legend()
     plt.show()
+	
+def model_fit(data, config):
 
-def load_data(filename, seq_len, normalise_window):
-    f = open(filename, 'r').read()
-    data = f.split('\n')
+	n_input, n_nodes, n_epochs, n_batch, n_diff, n_test_train_split = config
+
+	x_train, y_train, x_test, y_test = load_data(data, n_input, False, n_test_train_split)
+
+	n_features = 1
+	
+	model = Sequential()
+	model.add(LSTM(n_nodes, activation='relu', input_shape=(n_input, n_features)))
+	model.add(Dense(n_nodes, activation='relu'))
+	model.add(Dense(1))
+	model.compile(loss='mse', optimizer='adam')	
+	
+	# # model = Sequential()
+
+	# # model.add(LSTM(
+		# # input_dim=1,
+		# # output_dim=50,
+		# # return_sequences=True))
+	# # model.add(Dropout(0.2))
+
+	# # model.add(LSTM(
+		# # 100,
+		# # return_sequences=False))
+	# # model.add(Dropout(0.2))
+
+	# # model.add(Dense(
+		# # output_dim=1))
+	# # model.add(Activation('linear'))
+
+	#start = time.time()
+	# model.compile(loss='mse', optimizer='rmsprop')
+	#print('compilation time : ', time.time() - start)
+	
+	model.fit(x_train, y_train, epochs=n_epochs, batch_size=n_batch, verbose=0)
+	
+	return model
+
+def load_data(data, seq_len, normalise_window, test_train_split):
+    # f = open(filename, 'r').read()
+    # data = f.split('\n')
 
     sequence_length = seq_len + 1
     result = []
@@ -44,7 +76,7 @@ def load_data(filename, seq_len, normalise_window):
 
     result = np.array(result)
 
-    row = round(0.9 * result.shape[0])
+    row = round(test_train_split * result.shape[0])
     train = result[:int(row), :]
     np.random.shuffle(train)
     x_train = train[:, :-1]

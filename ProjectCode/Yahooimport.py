@@ -16,8 +16,9 @@ import pandas as pd
 
 def retrieve_data(ticker, start_date, end_date):
     data = yf.download(ticker, start_date, end_date)
-    print(data)
+    return data
+    #print(data)
     
     
     
-retrieve_data("AAPL", "2012-01-01", "2019-01-01")
+#retrieve_data("AAPL", "2012-01-01", "2019-01-01")
