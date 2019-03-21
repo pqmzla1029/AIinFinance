@@ -8,6 +8,7 @@ from keras.layers.core import Dense, Activation, Dropout
 from keras.layers.recurrent import LSTM
 from keras.models import Sequential
 import matplotlib.pyplot as plt
+from keras.callbacks import ModelCheckpoint
 
 warnings.filterwarnings("ignore")
 
@@ -28,21 +29,28 @@ def model_fit(data, config):
     x_train, y_train, x_test, y_test = load_data(data, n_input, False, n_test_train_split)
     n_features = 1
     model = Sequential()
-    model.add(LSTM(4, activation='relu', input_shape=(n_input, n_features)))
-    model.add(Dense(2*n_nodes, activation='relu'))
+    model.add(LSTM(6, activation='tanh', input_shape=(x_train.shape[1], x_train.shape[2])))#n_input, n_features
+    model.add(Dense(n_nodes, activation='relu'))
     model.add(Dropout(0.2))
     model.add(Dense(2*n_nodes, activation='relu'))
     model.add(Dropout(0.2))
-    model.add(Dense(3*n_nodes, activation='relu'))
+    model.add(Dense(3*n_nodes, activation='tanh'))
+    model.add(Dropout(0.2))
+    model.add(Dense(4*n_nodes, activation='tanh'))
+    model.add(Dropout(0.2))
+    model.add(Dense(5*n_nodes, activation='relu'))
     model.add(Dense(1))
-    model.compile(loss='mse', optimizer='adam')
-    model.fit(x_train, y_train, epochs=n_epochs, batch_size=n_batch, verbose=0)
-    print(y_test.shape)
-    return model, x_test, y_test
+    model.compile(loss='mean_squared_error', optimizer='adam', metrics = ['mse'])
+    filepath="LSTM-weights-best.hdf5"
+    checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
+    model.fit(x_train, y_train, epochs=n_epochs, batch_size=n_batch, verbose=1,validation_split=0.2,callbacks=[checkpoint])
+    
+    
+    return model, x_test, y_test, x_train, y_train
 
 def load_data(data, seq_len, normalise_window, test_train_split):
-    # f = open(filename, 'r').read()
-    # data = f.split('\n')
+    #f = open(filename, 'r').read()
+    #data = f.split('\n')
 
     sequence_length = seq_len + 1
     result = []
