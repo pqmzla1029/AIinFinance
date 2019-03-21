@@ -2,15 +2,16 @@ import datetime as dt
 import warnings
 import numpy as np
 import pandas as pd
+import import_funtions as ifunc
 
 def MACD(stockdf):
     df = stockdf
     df = df.reset_index()
-    df['30 mavg'] = pd.rolling_mean(df['Close'],30)
-    df['26 ema'] = pd.ewma(df['Close'], span = 26)
-    df['12 ema'] = pd.ewma(df['Close'], span = 12)
+    df['30 mavg'] = df['Close'].rolling(30).mean()
+    df['26 ema'] = df['Close'].ewm(span = 26).mean()
+    df['12 ema'] = df['Close'].ewm(span = 12).mean()
     df['MACD'] = (df['12 ema'] - df['26 ema'])
-    df['Signal'] = pd.ewma(df['MACD'], span = 9)
+    df['Signal'] = df['MACD'].ewm(span = 9).mean()
     df['Crossover'] = df['MACD'] - df['Signal']
     return df
 
@@ -41,5 +42,6 @@ def RSI(stockdf):
     return df
 
 
-def deltaPercentage(stockdf):
-
+stockdf = ifunc.read_full("AAPL.csv")
+stockdf = MACD(stockdf)
+# stockdf = RSI(stockdf)
