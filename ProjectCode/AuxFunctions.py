@@ -26,14 +26,14 @@ def RSI(stockdf):
     down[down>0] = 0
 
     # Calculate RSI based on EWMA
-    roll_up_ewma = pd.ewma(up, window_length)
-    roll_down_ewma = pd.ewma(down, window_length)
+    roll_up_ewma = up.ewm(span = window_length).mean()
+    roll_down_ewma = down.ewm(span = window_length).mean()
     RS_ewma = roll_up_ewma / roll_down_ewma
-    RSI_ewma = 100.0 - (100 / (1.0 + RS_ewma))
+    RSI_ewma = 100.0 - (100.0 / (1.0 + RS_ewma))
 
     # Calculate RSI based on SMA
-    roll_up_sma = pd.rolling_mean(up, window_length)
-    roll_down_sma = pd.rolling_mean(down, window_length)
+    roll_up_sma = up.rolling(window_length).mean()
+    roll_down_sma = down.rolling(window_length).mean()
     RS_sma = roll_up_sma / roll_down_sma
     RSI_sma = 100.0 - (100.0 / (1.0 + RS_sma))
 
@@ -41,8 +41,20 @@ def RSI(stockdf):
     df['RSI EWMA'] = RSI_ewma
     return df
 
+def DELTA(stockdf):
+    df = stockdf
+    df = df.reset_index()
+    df['Daily Change'] = df['Close'].pct_change()
+    df['5 Day Change'] = df['Close'].pct_change(periods = 5)
+    return df
 
 stockdf = ifunc.read_full("AAPL.csv")
 stockdf = MACD(stockdf)
+<<<<<<< HEAD
+stockdf = RSI(stockdf)
+stockdf = DELTA(stockdf)
+stockdf.to_csv(path_or_buf="titties.csv",index=False)
+=======
 stockdf.to_csv(path_or_buf="nudes.csv", index=False)
 # stockdf = RSI(stockdf)
+>>>>>>> 7349653cb6f906ad97b4083d1a26e750042fc909
