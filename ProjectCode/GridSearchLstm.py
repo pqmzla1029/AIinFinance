@@ -119,7 +119,7 @@ def grid_search(data, cfg_list, n_test):
 	return scores
 
 # create a list of configs to try
-def model_configs(n_input, n_nodes, n_epochs, n_batch, n_diff):
+def model_configs(n_input, n_nodes, n_epochs, n_batch, n_diff, n_test_train_split):
 	# define scope of configs
 	#n_input = [12]
 	#n_nodes = [100]
@@ -133,8 +133,9 @@ def model_configs(n_input, n_nodes, n_epochs, n_batch, n_diff):
 			for k in n_epochs:
 				for l in n_batch:
 					for m in n_diff:
-						cfg = [i, j, k, l, m]
-						configs.append(cfg)
+						for n in n_test_train_split:
+							cfg = [i, j, k, l, m, n]
+							configs.append(cfg)
 	print('Total configs: %d' % len(configs))
 	return configs
 
