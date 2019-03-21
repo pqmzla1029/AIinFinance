@@ -6,7 +6,7 @@ import import_functions as ifunc
 
 def MACD(stockdf):
     df = stockdf
-    df = df.reset_index()
+    #df = df.reset_index()
     df['30 mavg'] = df['Close'].rolling(30).mean()
     df['26 ema'] = df['Close'].ewm(span = 26).mean()
     df['12 ema'] = df['Close'].ewm(span = 12).mean()
@@ -43,7 +43,7 @@ def RSI(stockdf):
 
 def DELTA(stockdf):
     df = stockdf
-    df = df.reset_index()
+    #df = df.reset_index()
     df['Daily Change'] = df['Close'].pct_change()
     df['5 Day Change'] = df['Close'].pct_change(periods = 5)
     return df
