@@ -44,4 +44,5 @@ def RSI(stockdf):
 
 stockdf = ifunc.read_full("AAPL.csv")
 stockdf = MACD(stockdf)
+stockdf.to_csv(path_or_buf="nudes.csv", index=False)
 # stockdf = RSI(stockdf)
