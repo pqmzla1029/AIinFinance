@@ -1,14 +1,15 @@
 import PySimpleGUI as sg
+import datetime
 
 def run_GUI():
     sg.ChangeLookAndFeel('White')
 
     column1 = [[sg.Text('Choose Start Date', background_color='#d3dfda', justification='center', size=(20, 1))],      
-               [sg.In('2005-03-20 00:00:00', size=(20,1), key='input1')],      
+               [sg.In('2010-01-01 00:00:00', size=(20,1), key='input1')],      
                [sg.CalendarButton('Choose Date', target='input1', key='date1')]]  
-
+    datetome=str(datetime.datetime())
     column2 = [[sg.Text('Choose End Date', background_color='#d3dfda', justification='center', size=(20, 1))],      
-               [sg.In('2019-03-20 00:00:00', size=(20,1), key='input2')],      
+               [sg.In('2019-03-22 00:00:00', size=(20,1), key='input2')],      
                [sg.CalendarButton('Choose Date', target='input2', key='date2')]]      
 
     layout = [      

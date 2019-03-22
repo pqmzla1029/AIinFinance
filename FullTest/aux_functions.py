@@ -57,6 +57,9 @@ def main():
     stockdf = MACD(stockdf)
     stockdf = RSI(stockdf)
     stockdf = DELTA(stockdf)
-    stockdf.to_csv(path_or_buf=filename,index=False)
+
+    stockdf_Limited = stockdf.drop(['Adj Close', '30 mavg', '26 ema', '12 ema', 'Signal', 'Crossover'], axis = 1)
+
+    stockdf_Limited.to_csv(path_or_buf=filename,index=False)
 
 main()
