@@ -43,6 +43,7 @@ def model_fit(data, config):
     model.compile(loss='mean_squared_error', optimizer='adam', metrics = ['mse'])
     #filepath="LSTM-weights-best.hdf5"
     #checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
+    print(y_train.shape)
     model.fit(x_train, y_train, epochs=n_epochs, batch_size=n_batch, verbose=1,validation_split=0.2)#,callbacks=[checkpoint])
   #  model.load_weights("LSTM-weights-best.hdf5")
     
@@ -65,10 +66,16 @@ def load_data(data, seq_len, normalise_window, test_train_split):
     row = round(test_train_split * result.shape[0])
     train = result[:int(row), :]
     np.random.shuffle(train)
+    #x_train = train[:, :-1]
+    #y_train = train[:, -1]
+    #x_test = result[int(row):, :-1]
+    #y_test = result[int(row):, -1]
+    
     x_train = train[:, :-1]
     y_train = train[:, -1]
     x_test = result[int(row):, :-1]
     y_test = result[int(row):, -1]
+
 
     x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
     x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
