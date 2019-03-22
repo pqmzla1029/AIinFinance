@@ -10,19 +10,10 @@ def run_GUI():
     date_N_days_ago = datetime.datetime.now() - datetime.timedelta(days=N)
     date_N_days_ago=date_N_days_ago.strftime("%Y-%m-%d 00:00:00")
     column1 = [[sg.Text('Choose Start Date', background_color='#d3dfda', justification='center', size=(20, 1))],      
-<<<<<<< HEAD
-               [sg.In('2010-01-01 00:00:00', size=(20,1), key='input1')],      
-=======
-               [sg.In(date_N_years_ago, size=(20,1), key='input1')],      
->>>>>>> 49124000243a01a07ef03c062b24c6672789c5aa
+               [sg.In(date_N_years_ago, size=(20,1), key='input1')],
                [sg.CalendarButton('Choose Date', target='input1', key='date1')]]  
-    datetome=str(datetime.datetime())
     column2 = [[sg.Text('Choose End Date', background_color='#d3dfda', justification='center', size=(20, 1))],      
-<<<<<<< HEAD
-               [sg.In('2019-03-22 00:00:00', size=(20,1), key='input2')],      
-=======
-               [sg.In(date_N_days_ago, size=(20,1), key='input2')],      
->>>>>>> 49124000243a01a07ef03c062b24c6672789c5aa
+               [sg.In(date_N_days_ago, size=(20,1), key='input2')],
                [sg.CalendarButton('Choose Date', target='input2', key='date2')]]      
 
     layout = [      
