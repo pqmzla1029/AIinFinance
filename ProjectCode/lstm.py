@@ -21,7 +21,7 @@ def plot_results_multiple(predicted_data, true_data, prediction_len):
     for i, data in enumerate(predicted_data):
         padding = [None for p in range(i * prediction_len)]
         plt.plot(padding + data, label='Prediction')
-        plt.legend()
+        #plt.legend()
     plt.show()
 	
 def model_fit(data, config):
@@ -29,7 +29,7 @@ def model_fit(data, config):
     x_train, y_train, x_test, y_test = load_data(data, n_input, False, n_test_train_split)
     n_features = 1
     model = Sequential()
-    model.add(LSTM(6, activation='tanh', input_shape=(x_train.shape[1], x_train.shape[2])))#n_input, n_features
+    model.add(LSTM(4, activation='tanh', input_shape=(x_train.shape[1], x_train.shape[2])))#n_input, n_features
     model.add(Dense(n_nodes, activation='relu'))
     model.add(Dropout(0.2))
     model.add(Dense(2*n_nodes, activation='relu'))
@@ -41,10 +41,10 @@ def model_fit(data, config):
     model.add(Dense(5*n_nodes, activation='relu'))
     model.add(Dense(1))
     model.compile(loss='mean_squared_error', optimizer='adam', metrics = ['mse'])
-    filepath="LSTM-weights-best.hdf5"
-    checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
-    model.fit(x_train, y_train, epochs=n_epochs, batch_size=n_batch, verbose=1,validation_split=0.2,callbacks=[checkpoint])
-    
+    #filepath="LSTM-weights-best.hdf5"
+    #checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
+    model.fit(x_train, y_train, epochs=n_epochs, batch_size=n_batch, verbose=1,validation_split=0.2)#,callbacks=[checkpoint])
+  #  model.load_weights("LSTM-weights-best.hdf5")
     
     return model, x_test, y_test, x_train, y_train
 
