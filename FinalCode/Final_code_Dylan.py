@@ -30,24 +30,24 @@ def main():
 
 def globalVariableDefine():
     global start, end, window, per, epochs, dropout
-    start=2500 # How many days back the backtesting data set should start
-    end=1 # How many days back the backtesting data set should end, 0 would be today
+    start=1200 # How many days back the backtesting data set should start
+    end=200 # How many days back the backtesting data set should end, 0 would be today
     window=30 # Size of lookback period in predicting subsequent day, for example window = 30 means we use the past 30 trading days to predict the 31st day
     per=0.9 # Percent of data set to use as training, the rest will be used to test the model
     epochs = 100
     dropout = 0.2
 
-    global training_set_scaled, training_set, all_data, df, sc
+    global training_set_scaled, training_set, all_data, df, sc,sc1
     sc = MinMaxScaler(feature_range = (0, 1))
-
+    sc1 = MinMaxScaler(feature_range = (0, 1))
     # User defines which features to use for training
     use_Close = 1
     use_Adj_Close = 0
-    use_Open = 1
+    use_Open = 0
     use_High = 0
     use_Low = 0
     use_Volume = 0
-    use_MACD = 0
+    use_MACD = 1
     use_Signal_Line = 0
     use_MACD_Crossover = 1
     use_RSI_EWMA = 1
@@ -129,8 +129,9 @@ def getScore(xtest, model, sc, test_targets):
 
     predicted_price = pd.DataFrame(predicted_stock_price)
     prediction=np.where(predicted_price<predicted_price.shift(-1),1,-1)
-
-    real_prices = pd.DataFrame(test_targets)
+    
+    real_prices = pd.DataFrame(sc.inverse_transform(test_targets.reshape(-1, 1)))
+    
     real_prices.columns = ['Close']
     real_prices_shifted=np.where(real_prices<real_prices.shift(-1),1,-1)
 
@@ -154,14 +155,15 @@ def getScore(xtest, model, sc, test_targets):
 def dataImport(use_MACD, use_Close, use_Adj_Close, use_Open, use_Volume, use_Signal_Line, use_MACD_Crossover, use_RSI_EWMA, use_High, use_Low, use_Daily_Change, use_5_Day_Change):
     global df, df_scaled, all_data
     # Import data set designated by the simple GUI, Can be implemented fully with Igor's batch file if you comment the following line and uncomment the subsequent 6
-    df = pd.read_csv('AAPL.csv',index_col="date",parse_dates=True)
+    df1 = pd.read_csv('AAPL.csv',index_col="date",parse_dates=True)
     # company,date1,date2= ifunc.read_file()
     # filename=company+".csv"
     # df = ifunc.read_full(filename)
-    df = df.drop(df.index[0:11], axis = 0)
+    df = df1.drop(df1.index[0:11], axis = 0)
 #    df = df.reset_index()
 #    df = df.drop(['index'], axis = 1)
-    df_scaled = df.copy()
+    df=df1[-1*start:-1*end]
+    df_scaled = df1[-1*start:-1*end]
     all_data = df.copy()
 
     print()
@@ -178,35 +180,35 @@ def dataImport(use_MACD, use_Close, use_Adj_Close, use_Open, use_Volume, use_Sig
         df = df.drop(['Adj Close'], axis = 1)
         df_scaled = df_scaled.drop(['Adj Close'], axis = 1)
     else:
-        df_scaled[['Adj Close']] = sc.fit_transform(df_scaled[['Adj Close']])
+        df_scaled[['Adj Close']] = sc1.fit_transform(df_scaled[['Adj Close']])
         print('Adj Close')
 
     if use_Open == 0:
         df = df.drop(['Open'], axis = 1)
         df_scaled = df_scaled.drop(['Open'], axis = 1)
     else:
-        df_scaled[['Open']] = sc.fit_transform(df_scaled[['Open']])
+        df_scaled[['Open']] = sc1.fit_transform(df_scaled[['Open']])
         print('Open')
 
     if use_High == 0:
         df = df.drop(['High'], axis = 1)
         df_scaled = df_scaled.drop(['High'], axis = 1)
     else:
-        df_scaled[['High']] = sc.fit_transform(df_scaled[['High']])
+        df_scaled[['High']] = sc1.fit_transform(df_scaled[['High']])
         print('High')
 
     if use_Low == 0:
         df = df.drop(['Low'], axis = 1)
         df_scaled = df_scaled.drop(['Low'], axis = 1)
     else:
-        df_scaled[['Low']] = sc.fit_transform(df_scaled[['Low']])
+        df_scaled[['Low']] = sc1.fit_transform(df_scaled[['Low']])
         print('Low')
 
     if use_Volume == 0:
         df = df.drop(['Volume'], axis = 1)
         df_scaled = df_scaled.drop(['Volume'], axis = 1)
     else:
-        df_scaled[['Volume']] = sc.fit_transform(df_scaled[['Volume']])
+        df_scaled[['Volume']] = sc1.fit_transform(df_scaled[['Volume']])
         print('Volume')
 
     if use_MACD == 0:
@@ -247,7 +249,7 @@ def dataImport(use_MACD, use_Close, use_Adj_Close, use_Open, use_Volume, use_Sig
         print('5 Day Change')
 
     print()
-    return df_scaled[-1*start:-1*end], df[-1*start:-1*end], all_data
+    return df_scaled, df, all_data
 
 def plottingTime(pr_model, pr_market, real_prices):
 
