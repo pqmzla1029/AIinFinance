@@ -11,6 +11,7 @@ from keras.layers import LSTM
 from keras.layers import Dropout
 from sklearn.preprocessing import MinMaxScaler
 from random import shuffle
+import keras
 
 def main():
     start = time.time()
@@ -19,8 +20,14 @@ def main():
 
     model = buildModel(x_train)
     model.fit(x_train, y_train, epochs = epochs, batch_size = 32,shuffle=True)
+  
 
     score = getScore(x_test, model, sc, test_targets)
+    
+    test_mse=model.evaluate(x_test,y_test,verbose=0)
+    train_mse=model.evaluate(x_train,y_train,verbose=0)
+    print('train MSE', train_mse)
+    print('test MSE', test_mse)
     end = time.time()
 
     print()
@@ -47,10 +54,10 @@ def globalVariableDefine():
     use_High = 0
     use_Low = 0
     use_Volume = 0
-    use_MACD = 1
+    use_MACD = 0
     use_Signal_Line = 0
-    use_MACD_Crossover = 1
-    use_RSI_EWMA = 1
+    use_MACD_Crossover = 0
+    use_RSI_EWMA = 0
     use_Daily_Change = 0
     use_5_Day_Change = 0
 
@@ -149,6 +156,10 @@ def getScore(xtest, model, sc, test_targets):
     predicted_market_return = real_prices.returns.cumsum()
 
     plottingTime(predicted_model_return, predicted_market_return, real_prices)
+    
+    print('Market return',round(predicted_market_return.iloc[-2]*100,1),'%')
+    print('Model return',round(predicted_model_return.iloc[-2]*100,1),'%\n')
+    #print('Test Data MSE',keras.losses.mean_squared_error(real_prices, predicted_stock_price))
 
     return score
 
