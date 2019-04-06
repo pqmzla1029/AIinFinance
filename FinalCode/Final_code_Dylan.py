@@ -37,8 +37,8 @@ def main():
 
 def globalVariableDefine():
     global start, end, window, per, epochs, dropout
-    start=1200 # How many days back the backtesting data set should start
-    end=200 # How many days back the backtesting data set should end, 0 would be today
+    start=900 # How many days back the backtesting data set should start
+    end=100 # How many days back the backtesting data set should end, 0 would be today
     window=30 # Size of lookback period in predicting subsequent day, for example window = 30 means we use the past 30 trading days to predict the 31st day
     per=0.9 # Percent of data set to use as training, the rest will be used to test the model
     epochs = 100
@@ -58,7 +58,7 @@ def globalVariableDefine():
     use_Signal_Line = 0
     use_MACD_Crossover = 0
     use_RSI_EWMA = 0
-    use_Daily_Change = 0
+    use_Daily_Change = 1
     use_5_Day_Change = 0
 
     training_set_scaled, training_set, all_data = dataImport(use_MACD, use_Close, use_Adj_Close, use_Open, use_Volume, use_Signal_Line, use_MACD_Crossover, use_RSI_EWMA, use_High, use_Low, use_Daily_Change, use_5_Day_Change)
@@ -166,7 +166,7 @@ def getScore(xtest, model, sc, test_targets):
 def dataImport(use_MACD, use_Close, use_Adj_Close, use_Open, use_Volume, use_Signal_Line, use_MACD_Crossover, use_RSI_EWMA, use_High, use_Low, use_Daily_Change, use_5_Day_Change):
     global df, df_scaled, all_data
     # Import data set designated by the simple GUI, Can be implemented fully with Igor's batch file if you comment the following line and uncomment the subsequent 6
-    df1 = pd.read_csv('AAPL.csv',index_col="date",parse_dates=True)
+    df1 = pd.read_csv('SPY.csv',index_col="date",parse_dates=True)
     # company,date1,date2= ifunc.read_file()
     # filename=company+".csv"
     # df = ifunc.read_full(filename)
