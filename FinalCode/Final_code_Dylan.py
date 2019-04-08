@@ -61,7 +61,7 @@ def globalVariableDefine():
     use_Daily_Change = 1
     use_5_Day_Change = 0
 
-    training_set_scaled, training_set, all_data = dataImport(use_MACD, use_Close, use_Adj_Close, use_Open, use_Volume, use_Signal_Line, use_MACD_Crossover, use_RSI_EWMA, use_High, use_Low, use_Daily_Change, use_5_Day_Change)
+    training_set_scaled, training_set, all_data = dataModify(use_MACD, use_Close, use_Adj_Close, use_Open, use_Volume, use_Signal_Line, use_MACD_Crossover, use_RSI_EWMA, use_High, use_Low, use_Daily_Change, use_5_Day_Change)
 
     return training_set_scaled, training_set, all_data
 
@@ -163,7 +163,7 @@ def getScore(xtest, model, sc, test_targets):
 
     return score
 
-def dataImport(use_MACD, use_Close, use_Adj_Close, use_Open, use_Volume, use_Signal_Line, use_MACD_Crossover, use_RSI_EWMA, use_High, use_Low, use_Daily_Change, use_5_Day_Change):
+def dataModify(use_MACD, use_Close, use_Adj_Close, use_Open, use_Volume, use_Signal_Line, use_MACD_Crossover, use_RSI_EWMA, use_High, use_Low, use_Daily_Change, use_5_Day_Change):
     global df, df_scaled, all_data
     # Import data set designated by the simple GUI, Can be implemented fully with Igor's batch file if you comment the following line and uncomment the subsequent 6
     df1 = pd.read_csv('SPY.csv',index_col="date",parse_dates=True)
