@@ -170,10 +170,10 @@ def dataModify(use_MACD, use_Close, use_Adj_Close, use_Open, use_Volume, use_Sig
     company,date1,date2= ifunc.read_file()
     filename=company+".csv"
     df1 = pd.read_csv(filename,index_col="date",parse_dates=True)
-    #df1 = ifunc.read_full(filename)
+    # df1 = ifunc.read_full(filename)
     df = df1.drop(df1.index[0:11], axis = 0)
-    #df = df.reset_index()
-    #df = df.drop(['index'], axis = 1)
+    # df = df.reset_index()
+    # df = df.drop(['index'], axis = 1)
     df=df1[-1*start:-1*end]
     df_scaled = df1[-1*start:-1*end]
     all_data = df.copy()

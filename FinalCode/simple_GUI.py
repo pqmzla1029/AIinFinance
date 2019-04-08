@@ -18,7 +18,7 @@ def run_GUI():
 
     layout = [      
         [sg.Text('AIinFinance', size=(30, 1), font=("Helvetica", 25))],      
-        [sg.InputCombo(('AAPL', 'GOOGL', 'HP'), size=(20, 3), key='text1')],     
+        [sg.InputCombo(('SPY', 'GOOGL', 'AAPL'), size=(20, 3), key='text1')],     
         #[sg.InputText('This is my text')],
         [sg.Column(column1, background_color='#d3dfda'),sg.Column(column2, background_color='#d3dfda')],
         [sg.Ok(key=1)]
