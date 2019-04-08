@@ -166,13 +166,14 @@ def getScore(xtest, model, sc, test_targets):
 def dataModify(use_MACD, use_Close, use_Adj_Close, use_Open, use_Volume, use_Signal_Line, use_MACD_Crossover, use_RSI_EWMA, use_High, use_Low, use_Daily_Change, use_5_Day_Change):
     global df, df_scaled, all_data
     # Import data set designated by the simple GUI, Can be implemented fully with Igor's batch file if you comment the following line and uncomment the subsequent 6
-    df1 = pd.read_csv('SPY.csv',index_col="date",parse_dates=True)
-    # company,date1,date2= ifunc.read_file()
-    # filename=company+".csv"
-    # df = ifunc.read_full(filename)
+    # df1 = pd.read_csv('SPY.csv',index_col="date",parse_dates=True)
+    company,date1,date2= ifunc.read_file()
+    filename=company+".csv"
+    df1 = pd.read_csv(filename,index_col="date",parse_dates=True)
+    #df1 = ifunc.read_full(filename)
     df = df1.drop(df1.index[0:11], axis = 0)
-#    df = df.reset_index()
-#    df = df.drop(['index'], axis = 1)
+    #df = df.reset_index()
+    #df = df.drop(['index'], axis = 1)
     df=df1[-1*start:-1*end]
     df_scaled = df1[-1*start:-1*end]
     all_data = df.copy()
